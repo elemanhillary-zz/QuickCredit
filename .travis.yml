@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+    - node_modules
+# blocklist
+branches:
+  except:
+  - lmaster 
+before_script:
+  - npm install
+  - psql -c 'create database travis_ci_test;' -U postgres
