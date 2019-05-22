@@ -134,3 +134,63 @@ export const repay = async (req, res) => {
     throw Error(e);
   }
 };
+
+export const adminrepay = async (req, res) => {
+  let rows;
+  const { error } = validate.validateAdminRepay(req.body);
+  if (error) {
+    res.status(422).json({
+      status: 422,
+      message: error.details[0].message,
+    });
+  }
+  const { email, amount } = req.body;
+  const parsedAmount = parseFloat(amount, 10);
+  try {
+    rows = await query('SELECT * FROM loans where email = $1 AND repaid = false', [email]);
+    if (rows.rows.length > 0) {
+      const loanId = parseInt(req.params.id, 10);
+      const { loantype } = rows.rows[0];
+      const balanceAmount = rows.rows[0].balance;
+      const mi = parseFloat(rows.rows[0].paymentinstallment);
+      const loanedAmount = parseFloat(rows.rows[0].amount);
+      const balance = parseFloat(balanceAmount - parsedAmount);
+      const row = await query(`INSERT INTO repayments (loantype, loanId, amount,
+          monthlyInstallment, paidAmount, balance) VALUES ($1, $2, $3, $4, $5, $6) returning *`,
+      [loantype, loanId, loanedAmount, mi, parsedAmount, balance]);
+      await query('UPDATE loans SET balance = $1 returning *', [balance]);
+      res.status(201).json({
+        status: 201,
+        created: true,
+        data: row.rows[0],
+      });
+    } else {
+      res.status(403).json({
+        status: 403,
+        message: 'you don\'t have recurring loan',
+      });
+    }
+  } catch (e) {
+    throw Error(e);
+  }
+};
+
+export const repayLoanHist = async (req, res) => {
+  try {
+    const { rows } = await query('SELECT * FROM loans where email = $1 AND id = $2', [req.decoded.user, req.params.id]);
+    if (rows.length > 0) {
+      res.status(200).json({
+        status: 200,
+        success: true,
+        data: rows,
+      });
+    } else {
+      res.status(204).json({
+        status: 204,
+        message: 'no content',
+      });
+    }
+  } catch (e) {
+    throw new Error(e);
+  }
+};
