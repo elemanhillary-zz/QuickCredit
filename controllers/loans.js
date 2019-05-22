@@ -92,3 +92,45 @@ export const getALL = async (req, res) => {
     throw new Error(e);
   }
 };
+export const repay = async (req, res) => {
+  let rows;
+  const { error } = validate.validateAmount(req.body);
+  if (error) {
+    res.status(422).json({
+      status: 422,
+      message: error.details[0].message,
+    });
+  }
+  const { amount } = req.body;
+  const parsedAmount = parseFloat(amount, 10);
+  try {
+    rows = await query('SELECT * FROM loans where id = $1 AND repaid = false AND (status = \'pending\' OR status = \'rejected\')', [parseInt(req.params.id, 10)]);
+    if (rows.rows.length > 0) {
+      const loanId = parseInt(req.params.id, 10);
+      const { loantype } = rows.rows[0];
+      const balanceAmount = rows.rows[0].balance;
+      const mi = parseFloat(rows.rows[0].paymentinstallment);
+      const loanedAmount = parseFloat(rows.rows[0].amount);
+      const balance = parseFloat(balanceAmount - parsedAmount);
+      const row = await query(`INSERT INTO repayments (loantype, loanId, amount,
+          monthlyInstallment, paidAmount, balance) VALUES ($1, $2, $3, $4, $5, $6) returning *`,
+      [loantype, loanId, loanedAmount, mi, parsedAmount, balance]);
+      await query('UPDATE loans SET balance = $1', [balance]);
+      if (balance <= 0) {
+        await query('UPDATE loans SET repaid = true');
+      }
+      res.status(201).json({
+        status: 201,
+        created: true,
+        data: row.rows[0],
+      });
+    } else {
+      res.status(403).json({
+        status: 403,
+        message: 'you don\'t have recurring loan',
+      });
+    }
+  } catch (e) {
+    throw Error(e);
+  }
+};
