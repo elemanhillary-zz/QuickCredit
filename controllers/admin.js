@@ -77,3 +77,33 @@ export const getLoan = async (req, res) => {
     });
   }
 };
+
+export const verifyLoan = async (req, res) => {
+  const { error } = validate.validateLoanStatus(req.body);
+  if (error) {
+    res.status(422).json({
+      status: 422,
+      message: error.details[0].message,
+    });
+  }
+
+  const { status } = req.body;
+  const parsedId = parseInt(req.params.id, 10);
+  try {
+    const { rows } = await query(`UPDATE loans SET 
+    status = $1 where id = $2 returning *`, [status, parsedId]);
+    if (rows.length > 0 && rows[0].status === status) {
+      res.status(200).json({
+        status: 200,
+        message: status,
+      });
+    } else {
+      res.json(204).json({
+        status: 204,
+        message: 'no content',
+      });
+    }
+  } catch (e) {
+    throw new Error(e);
+  }
+};
