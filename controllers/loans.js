@@ -43,3 +43,52 @@ export const loanApply = async (req, res) => {
     throw Error(e);
   }
 };
+
+export const getALL = async (req, res) => {
+  const { status, repaid } = req.query;
+  let rows;
+  if (Object.keys(req.query).length !== 0 && req.method === 'GET') {
+    const repaidTrim = repaid.trim();
+    let repaidBool;
+    if (repaidTrim === 'true') {
+      repaidBool = true;
+    } else if (repaidTrim === 'false') {
+      repaidBool = false;
+    }
+    try {
+      rows = await query('SELECT * FROM loans where status = $1 AND repaid = $2',
+        [status, repaidBool]);
+      if (rows.rows.length > 0) {
+        res.status(200).json({
+          status: 200,
+          success: true,
+          data: rows.rows,
+        });
+      } else {
+        res.status(204).json({
+          status: 204,
+          message: 'no content',
+        });
+      }
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+  try {
+    rows = await query('SELECT * FROM loans');
+    if (rows.rows.length > 0) {
+      res.status(200).json({
+        status: 200,
+        success: true,
+        data: rows.rows,
+      });
+    } else {
+      res.status(204).json({
+        status: 204,
+        message: 'no content',
+      });
+    }
+  } catch (e) {
+    throw new Error(e);
+  }
+};
