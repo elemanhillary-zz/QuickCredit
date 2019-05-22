@@ -39,3 +39,35 @@ export const signup = async (req, res) => {
     }
   }
 };
+
+export const signin = async (req, res) => {
+  const { error } = validate.validateLogin(req.body);
+  if (error) {
+    res.status(422).json({
+      status: 422,
+      message: error.details[0].message,
+    });
+  }
+
+  const { email, pin } = req.body;
+  const token = Auth.genToken(email);
+  try {
+    const { rows } = await query('SELECT * FROM users where email = $1', [email]);
+    const authBoolean = Auth.compareHash(pin, rows[0].password);
+    if (authBoolean) {
+      res.status(200).json({
+        status: 200,
+        Success: authBoolean,
+        token,
+        data: rows[0],
+      });
+    } else {
+      res.status(401).json({
+        status: 401,
+        message: 'Wrong email or password',
+      });
+    }
+  } catch (e) {
+    throw new Error(e);
+  }
+};
