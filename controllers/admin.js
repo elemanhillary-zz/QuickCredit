@@ -53,3 +53,27 @@ export const verifyUser = async (req, res) => {
     });
   }
 };
+
+export const getLoan = async (req, res) => {
+  try {
+    const { rows } = await query('SELECT * FROM loans where id = $1', [req.params.id]);
+    if (rows.length > 0) {
+      res.status(200).json({
+        status: 200,
+        success: true,
+        data: rows[0],
+      });
+    } else {
+      res.status(204).json({
+        status: 204,
+        success: false,
+        message: 'No content',
+      });
+    }
+  } catch (e) {
+    res.status(400).json({
+      status: 400,
+      message: e,
+    });
+  }
+};
