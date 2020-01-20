@@ -111,7 +111,7 @@ submitLogin.onclick = (e) => {
 	.catch(error => console.error(error))
 
 	async function postFormData(url, data) {
-		const formData = new FormData(document.querySelector('.sign_in form'))
+		const formData = new FormData(document.querySelector('#login_form'))
 		console.log(formData)
 		const response = await fetch(url, {
 			method: 'POST',
