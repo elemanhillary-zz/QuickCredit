@@ -111,7 +111,7 @@ submitLogin.onclick = (e) => {
 	.catch(error => console.error(error))
 
 	async function postFormData(url, data) {
-		console.log(document.querySelector('#login_form'))
+		console.log(document.querySelector('#email').value,document.querySelector('#email').value)
 		const formData = new FormData(document.querySelector('#login_form'))
 		console.log(formData)
 		const response = await fetch(url, {
