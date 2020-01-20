@@ -70,7 +70,7 @@ const toggleButtons = () => {
 // 	}
 // }
 
-let submitLogin = document.querySelector('#submit_login');
+let submitLogin = document.getElementById("u_0_y submit_login");
 console.log(submitLogin)
 submitLogin.onclick = (e) => {
 	postFormData('https://qwikcredit.herokuapp.com/api/v1/auth/signin')
