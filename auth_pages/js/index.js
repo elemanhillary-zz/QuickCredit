@@ -70,7 +70,8 @@ const toggleButtons = () => {
 // 	}
 // }
 
-let submitLogin = document.getElementById("u_0_y submit_login");
+
+setTimeout(()=>{let submitLogin = document.getElementById("u_0_y submit_login");
 console.log(submitLogin)
 submitLogin.onclick = (e) => {
 	postFormData('https://qwikcredit.herokuapp.com/api/v1/auth/signin')
@@ -122,7 +123,7 @@ submitLogin.onclick = (e) => {
 		return await response.json();
 	}
 }
-
+}, 300)
 (function () {
 	toggleButtons();
 })();
