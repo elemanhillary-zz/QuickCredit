@@ -35,43 +35,43 @@ const toggleButtons = () => {
 	}
 }
 
-let submit = document.querySelector('.submit');
+// let submit = document.querySelector('.submit');
 
-submit.onclick = (e) => {
-	postFormData('https://qwikcredit.herokuapp.com/api/v1/auth/signup')
-	.then(data => {
-		if (data.Created) {
-			window.location.href = "https://elemanhillary.github.io/QuickCredit/auth_pages/"
-		} else if (data.status === 422){
-			errors.textContent = data.message;
-			errors.style.display = 'block'
-			setTimeout(function() {
-				errors.style.display = 'none'
-			}, 1500)			
-		} else {
-			errors.textContent = 'User already exists';
-			errors.style.display = 'block'
-			setTimeout(function() {
-				errors.style.display = 'none'
-			}, 1500)
-		}
+// submit.onclick = (e) => {
+// 	postFormData('https://qwikcredit.herokuapp.com/api/v1/auth/signup')
+// 	.then(data => {
+// 		if (data.Created) {
+// 			window.location.href = "https://elemanhillary.github.io/QuickCredit/auth_pages/"
+// 		} else if (data.status === 422){
+// 			errors.textContent = data.message;
+// 			errors.style.display = 'block'
+// 			setTimeout(function() {
+// 				errors.style.display = 'none'
+// 			}, 1500)			
+// 		} else {
+// 			errors.textContent = 'User already exists';
+// 			errors.style.display = 'block'
+// 			setTimeout(function() {
+// 				errors.style.display = 'none'
+// 			}, 1500)
+// 		}
 		
-	})
-	.catch(error => console.error(error))
+// 	})
+// 	.catch(error => console.error(error))
 
-	async function postFormData(url, data) {
-		const formData = new FormData(document.querySelector('.sign_up form'))
-		const response = await fetch(url, {
-			method: 'POST',
-			body: new URLSearchParams(formData),
-			headers: new Headers({ 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8' })
-		});
-		return await response.json();
-	}
-}
+// 	async function postFormData(url, data) {
+// 		const formData = new FormData(document.querySelector('.sign_up form'))
+// 		const response = await fetch(url, {
+// 			method: 'POST',
+// 			body: new URLSearchParams(formData),
+// 			headers: new Headers({ 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8' })
+// 		});
+// 		return await response.json();
+// 	}
+// }
 
 let submitLogin = document.querySelector('#submit_login');
-
+console.log(submitLogin)
 submitLogin.onclick = (e) => {
 	postFormData('https://qwikcredit.herokuapp.com/api/v1/auth/signin')
 	.then(data => {
